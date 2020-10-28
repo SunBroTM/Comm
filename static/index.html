@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+
+    <div class="text-area-container">
+        <textarea id="log" rows=15 cols=50></textarea>
+    </div>
+    <input type="text" id="test" value="">
+    <input type="text" id="name" value="User">
+    <button onclick="updateLog()">Submit</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script>         
+let socket = io();
+window.onload = load();
+function load() {
+    socket.emit("getModel","");
+    socket.on("model", function (msg) {
+    console.log(msg);
+    document.getElementById("log").innerHTML = JSON.parse(msg);
+ 
+
+});
+}
+function updateLog() {
+
+    var x = document.getElementById("test").value;
+    var name = document.getElementById("name").value;
+    var line = "\n" + name + "> " + x;
+    document.getElementById("log").innerHTML += line;
+    //document.getElementById("log").innerHTML += `${string} (${method})\n`;''
+    Stringy = new String;
+    document.getElementById("test").value = "";
+    document.getElementById("log").scrollTop = document.getElementById("log").scrollHeight 
+    socket.emit("setModel", JSON.stringify(line));
+    socket.emit("getModel","");
+
+socket.on("model", function (msg) {
+    console.log(msg);
+    document.getElementById("log").innerHTML = JSON.parse(msg);
+ 
+
+});
+}
+
+</script>
+
+
+
+</html>
